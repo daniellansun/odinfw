@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id "org.springframework.boot" version "2.0.2.RELEASE"
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+}
+
+group 'com.hkbea'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+bootJar {
+    baseName = 'odinfw'
+    version =  '0.0.1'
+}
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+    mavenCentral()
+}
+
+ext {
+    vaadinVersion = '8.4.3'
+    vaadinSpringBootStarterVersion = '3.0.1'
+    junitVersion = '4.12'
+    springBootVersion = '2.0.2.RELEASE'
+}
+
+dependencies {
+    compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringBootStarterVersion"
+
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.8'
+}
