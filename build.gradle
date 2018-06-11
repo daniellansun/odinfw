@@ -1,19 +1,17 @@
 plugins {
     id 'java'
-    id "org.springframework.boot" version "2.0.2.RELEASE"
+    id 'war'
+    id "org.springframework.boot" version "1.5.13.RELEASE"
     id "io.spring.dependency-management" version "1.0.5.RELEASE"
 }
 
 group 'com.hkbea'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-bootJar {
-    baseName = 'odinfw'
-    version =  '0.0.1'
-}
+compileJava.options.encoding = 'UTF-8'
 
 repositories {
     maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
@@ -22,13 +20,14 @@ repositories {
 
 ext {
     vaadinVersion = '8.4.3'
+    springBootVersion = '1.5.13.RELEASE'
     vaadinSpringBootStarterVersion = '3.0.1'
     junitVersion = '4.12'
-    springBootVersion = '2.0.2.RELEASE'
 }
 
 dependencies {
     compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringBootStarterVersion"
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
