@@ -35,7 +35,7 @@ public class OdinUI extends UI {
 
         mainLayout.setExpandRatio(body, 1);
 
-        mainLayout.setMargin(new MarginInfo(true, false));
+//        mainLayout.setMargin(new MarginInfo(true, false));
 
         this.setContent(mainLayout);
         mainLayout.setHeight("100%");
