@@ -14,11 +14,18 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
+import java.util.Locale;
 
 @Title("Odin Framework")
 @SpringUI
 public class OdinUI extends UI {
     public static final String ID_CONTENT_PANEL = "contentPanel";
+
+    @Autowired
+    private ResourceBundleMessageSource resourceBundleMessageSource;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -85,12 +92,18 @@ public class OdinUI extends UI {
         HorizontalLayout footer = new HorizontalLayout();
         footer.setWidth("100%");
 
-        Label copyrightLabel = new Label("Copyright ©2012 The Bank of East Asia (China) Limited", ContentMode.HTML);
+        Label copyrightLabel = new Label(i18n("app.copyright", "2012"), ContentMode.HTML);
         copyrightLabel.setWidth(null);
         footer.addComponent(copyrightLabel);
         footer.setComponentAlignment(copyrightLabel, Alignment.MIDDLE_CENTER);
         footer.setExpandRatio(copyrightLabel, 1.0f); // Expand
 
         return footer;
+    }
+
+    public String i18n(String code, String... args) {
+        Locale locale = this.getLocale();
+
+        return resourceBundleMessageSource.getMessage(code, args, locale);
     }
 }
