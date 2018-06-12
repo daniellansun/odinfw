@@ -5,24 +5,33 @@ import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Optional;
 
 @Title("Odin Framework")
 @SpringUI
 public class OdinUI extends UI {
     public static final String ID_CONTENT_PANEL = "contentPanel";
+    private static final String ZW = "中文";
+    private static final String EN = "English";
+    private static final Locale LOCALE_ZH_CN = new Locale("zh", "CN");
+    private static final Locale LOCALE_EN_US = new Locale("en", "US");
 
     @Autowired
     private ResourceBundleMessageSource resourceBundleMessageSource;
@@ -37,7 +46,7 @@ public class OdinUI extends UI {
 
         mainLayout.setExpandRatio(body, 1);
 
-//        mainLayout.setMargin(new MarginInfo(true, false));
+        mainLayout.setMargin(new MarginInfo(true, false));
 
         this.setContent(mainLayout);
         mainLayout.setHeight("100%");
@@ -47,13 +56,14 @@ public class OdinUI extends UI {
         HorizontalLayout titleBar = new HorizontalLayout();
         titleBar.setWidth("100%");
 
-        Label title = new Label("<strong style='font-size: 25px;'>Odin Framework Demo</strong>", ContentMode.HTML);
+        Label title = new Label("<strong style='font-size: 25px;'>" + i18n("app.title") + "</strong>", ContentMode.HTML);
         titleBar.addComponent(title);
         titleBar.setExpandRatio(title, 1.0f); // Expand
 
-        Label titleComment = new Label("for BEA");
-        titleComment.setSizeUndefined(); // Take minimum space
-        titleBar.addComponent(titleComment);
+        NativeSelect languageSelect = createLanguageSelect(request);
+
+//        languageSelect.setSizeUndefined(); // Take minimum space
+        titleBar.addComponent(languageSelect);
 
         return titleBar;
     }
@@ -101,8 +111,36 @@ public class OdinUI extends UI {
         return footer;
     }
 
+    private NativeSelect createLanguageSelect(VaadinRequest request) {
+        NativeSelect<String> languageSelect = new NativeSelect<>(i18n("select.language"), Arrays.asList(EN, ZW));
+        languageSelect.setWidth("105px");
+        languageSelect.setEmptySelectionAllowed(false);
+
+        if (LOCALE_ZH_CN.equals(VaadinSession.getCurrent().getLocale())) {
+            languageSelect.setSelectedItem(ZW);
+        } else {
+            languageSelect.setSelectedItem(EN);
+        }
+
+        languageSelect.addSelectionListener(event -> {
+            Optional<String> item = event.getSelectedItem();
+
+            VaadinSession session = VaadinSession.getCurrent();
+            if (ZW.equals(item.get())) {
+                session.setLocale(LOCALE_ZH_CN);
+            } else {
+                session.setLocale(LOCALE_EN_US);
+            }
+
+            this.getPage().reload();
+        });
+
+        return languageSelect;
+    }
+
+
     public String i18n(String code, String... args) {
-        Locale locale = this.getLocale();
+        Locale locale = VaadinSession.getCurrent().getLocale();
 
         return resourceBundleMessageSource.getMessage(code, args, locale);
     }
