@@ -4,6 +4,7 @@ import com.vaadin.data.TreeData;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
 
@@ -29,7 +30,17 @@ public class MenuTree extends Tree<MenuTree.Menu> {
 
                 optionalContentPanel.ifPresent(component -> {
                     if (component instanceof Panel) {
-                        ((Panel) component).setContent(new Label("Hello, world!" + System.nanoTime()));
+                        if (null != item.getFormName()) {
+                            try {
+                                ((Panel) component).setContent(FormManager.INSTANCE.createForm(item.getFormName()));
+                            } catch (Exception e)  {
+                                e.printStackTrace();
+                                Notification.show("Failed to create form[" + item.getFormName() + "]:" + e.getMessage());
+                            }
+                        } else {
+                            ((Panel) component).setContent(new Label("Hello, world!" + System.nanoTime()));
+                        }
+
                     } else {
                         throw new IllegalStateException("The content panel should be instanceof Panel, but it is not");
                     }
@@ -89,7 +100,7 @@ public class MenuTree extends Tree<MenuTree.Menu> {
 
         if ("2".equals(menu.getId())) {
             return Arrays.asList(
-                    new MenuTree.Menu("21", "Manage Users", true, menu.getId()),
+                    new MenuTree.Menu("21", "Manage Users", true, menu.getId(), "UserForm"),
                     new MenuTree.Menu("22", "Manage Roles", true, menu.getId())
             );
         }
@@ -102,12 +113,18 @@ public class MenuTree extends Tree<MenuTree.Menu> {
         private String text;
         private boolean leaf;
         private String parentId;
+        private String formName;
 
         public Menu(String id, String text, boolean leaf, String parentId) {
             this.id = id;
             this.text = text;
             this.leaf = leaf;
             this.parentId = parentId;
+        }
+
+        public Menu(String id, String text, boolean leaf, String parentId, String formName) {
+            this(id, text, leaf, parentId);
+            this.formName = formName;
         }
 
         public String getId() {
@@ -140,6 +157,14 @@ public class MenuTree extends Tree<MenuTree.Menu> {
 
         public void setParentId(String parentId) {
             this.parentId = parentId;
+        }
+
+        public String getFormName() {
+            return formName;
+        }
+
+        public void setFormName(String formName) {
+            this.formName = formName;
         }
 
         @Override
