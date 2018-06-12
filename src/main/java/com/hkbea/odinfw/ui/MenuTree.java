@@ -2,12 +2,16 @@ package com.hkbea.odinfw.ui;
 
 import com.vaadin.data.TreeData;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class MenuTree extends Tree<MenuTree.Menu> {
     public MenuTree() {
@@ -21,7 +25,15 @@ public class MenuTree extends Tree<MenuTree.Menu> {
             Menu item = event.getItem();
 
             if (item.isLeaf()) {
-                System.out.println("TODO show " + item.getText());
+                Optional<Component> optionalContentPanel = UiUtils.findComponentById(OdinUI.ID_CONTENT_PANEL);
+
+                optionalContentPanel.ifPresent(component -> {
+                    if (component instanceof Panel) {
+                        ((Panel) component).setContent(new Label("Hello, world!" + System.nanoTime()));
+                    } else {
+                        throw new IllegalStateException("The content panel should be instanceof Panel, but it is not");
+                    }
+                });
             } else {
                 addSubMenus(item);
             }
@@ -57,7 +69,7 @@ public class MenuTree extends Tree<MenuTree.Menu> {
     }
 
     /**
-     * menu data should be loaded from DB
+     * TODO menu data should be loaded from DB
      * @param menu
      * @return
      */

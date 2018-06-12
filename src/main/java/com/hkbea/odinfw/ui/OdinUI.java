@@ -18,6 +18,8 @@ import com.vaadin.ui.VerticalLayout;
 @Title("Odin Framework")
 @SpringUI
 public class OdinUI extends UI {
+    public static final String ID_CONTENT_PANEL = "contentPanel";
+
     @Override
     protected void init(VaadinRequest request) {
         Responsive.makeResponsive(this);
@@ -56,7 +58,6 @@ public class OdinUI extends UI {
         int height = currentPage.getBrowserWindowHeight();
 
         horizontalSplitPanel.setSplitPosition(Math.min(width, height) * 0.39f, Sizeable.Unit.PIXELS, false);
-
         horizontalSplitPanel.setFirstComponent(createMenuTreePanel(request));
         horizontalSplitPanel.setSecondComponent(createContentPanel(request));
 
@@ -74,6 +75,7 @@ public class OdinUI extends UI {
 
     private Panel createContentPanel(VaadinRequest request) {
         Panel contentPanel = new Panel();
+        contentPanel.setId(ID_CONTENT_PANEL);
         contentPanel.setSizeFull();
 
         return contentPanel;
