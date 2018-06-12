@@ -1,26 +1,19 @@
 package com.hkbea.odinfw.ui;
 
 import com.vaadin.annotations.Title;
-import com.vaadin.data.TreeData;
-import com.vaadin.data.provider.TreeDataProvider;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Tree;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-
-import java.util.Arrays;
 
 @Title("Odin Framework")
 @SpringUI
@@ -71,24 +64,9 @@ public class OdinUI extends UI {
     }
 
     private Panel createMenuTreePanel(VaadinRequest request) {
-        Tree<String> tree = new Tree<>("Hardware Inventory");
+        MenuTree menuTree = new MenuTree();
 
-        TreeData<String> data = new TreeData<>();
-        data.addItems(null, "Instrument Management", "System Administration")
-                .addItems("Instrument Management", "Manage Instruments")
-                .addItems("System Administration", "Manage Users", "Manage Roles");
-
-        tree.setDataProvider(new TreeDataProvider<>(data));
-        tree.expand("Instrument Management", "System Administration");
-        tree.setItemIconGenerator(item -> {
-            if (Arrays.asList("Instrument Management", "System Administration").contains(item)) {
-                return VaadinIcons.MENU;
-            }
-
-            return VaadinIcons.ANGLE_RIGHT;
-        });
-
-        Panel treePanel = new Panel(tree);
+        Panel treePanel = new Panel(menuTree);
         treePanel.setHeight("100%");
 
         return treePanel;
