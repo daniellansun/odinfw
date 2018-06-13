@@ -1,6 +1,7 @@
 package com.hkbea.app.ui.forms;
 
 import com.hkbea.app.domain.User;
+import com.hkbea.app.repositories.UserRepository;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
@@ -12,14 +13,20 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+
+import java.util.List;
 
 import static com.hkbea.odinfw.ui.UiUtils.i18n;
 
 @SpringView(name="UserForm")
 public class UserForm extends VerticalLayout implements View {
     private Grid<User> grid = new Grid<>();
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostConstruct
     private void init() {
@@ -49,18 +56,16 @@ public class UserForm extends VerticalLayout implements View {
         nameTF.setRequiredIndicatorVisible(true);
         fieldsHL.addComponent(nameTF);
 
-        PasswordField passwordTF = new PasswordField(i18n("text.password"));
-        passwordTF.setIcon(VaadinIcons.PASSWORD);
-        passwordTF.setRequiredIndicatorVisible(true);
-        fieldsHL.addComponent(passwordTF);
+//        PasswordField passwordTF = new PasswordField(i18n("text.password"));
+//        passwordTF.setIcon(VaadinIcons.PASSWORD);
+//        passwordTF.setRequiredIndicatorVisible(true);
+//        fieldsHL.addComponent(passwordTF);
 
         Button queryBtn = new Button(i18n("text.query"));
         queryBtn.addClickListener((Button.ClickListener) event -> {
-            grid.setItems(
-                    new User("1", "Daniel", "****"),
-                    new User("2", "Paul", "****"),
-                    new User("3", "John", "****")
-            );
+            List<User> userList = userRepository.selectAll(new User(idTF.getValue(), nameTF.getValue(), null));
+
+            grid.setItems(userList);
 
             grid.setVisible(true);
         });
