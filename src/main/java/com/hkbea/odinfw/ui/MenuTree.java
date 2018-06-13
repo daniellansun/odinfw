@@ -2,17 +2,13 @@ package com.hkbea.odinfw.ui;
 
 import com.vaadin.data.TreeData;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
+import com.vaadin.ui.UI;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class MenuTree extends Tree<MenuTree.Menu> {
     public MenuTree() {
@@ -26,25 +22,9 @@ public class MenuTree extends Tree<MenuTree.Menu> {
             Menu item = event.getItem();
 
             if (item.isLeaf()) {
-                Optional<Component> optionalContentPanel = UiUtils.findComponentById(OdinUI.ID_CONTENT_PANEL);
-
-                optionalContentPanel.ifPresent(component -> {
-                    if (component instanceof Panel) {
-                        if (null != item.getFormName()) {
-                            try {
-                                ((Panel) component).setContent(FormManager.INSTANCE.createForm(item.getFormName()));
-                            } catch (Exception e)  {
-                                e.printStackTrace();
-                                Notification.show("Failed to create form[" + item.getFormName() + "]:" + e.getMessage());
-                            }
-                        } else {
-                            ((Panel) component).setContent(new Label("Hello, world!" + System.nanoTime()));
-                        }
-
-                    } else {
-                        throw new IllegalStateException("The content panel should be instanceof Panel, but it is not");
-                    }
-                });
+                if (null != item.formName) {
+                    UI.getCurrent().getNavigator().navigateTo(item.formName);
+                }
             } else {
                 addSubMenus(item);
             }

@@ -16,9 +16,11 @@ compileJava.options.encoding = 'UTF-8'
 repositories {
     maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
     mavenCentral()
+    maven { url 'http://vaadin.com/nexus/content/repositories/vaadin-addons/' }
 }
 
 ext {
+    viritinVersion = '2.5'
     vaadinVersion = '8.4.3'
     springBootVersion = '1.5.13.RELEASE'
     vaadinSpringBootStarterVersion = '3.0.1'
@@ -27,6 +29,7 @@ ext {
 }
 
 dependencies {
+    compile "org.vaadin:viritin:$viritinVersion"
     compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringBootStarterVersion"
     compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
     runtime "com.h2database:h2:$h2Version"

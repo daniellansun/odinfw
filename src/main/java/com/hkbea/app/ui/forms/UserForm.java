@@ -1,29 +1,27 @@
 package com.hkbea.app.ui.forms;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.UserError;
+import com.vaadin.navigator.View;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
-public class UserForm extends FormLayout {
-    public UserForm() {
-        init();
-    }
+import javax.annotation.PostConstruct;
 
+@SpringView(name="UserForm")
+public class UserForm extends FormLayout implements View {
+    @PostConstruct
     private void init() {
-        TextField tf1 = new TextField("Name");
-        tf1.setIcon(VaadinIcons.USER);
-        tf1.setRequiredIndicatorVisible(true);
-        this.addComponent(tf1);
+        this.setMargin(true);
+        TextField nameTF = new TextField("Name");
+        nameTF.setIcon(VaadinIcons.USER);
+        nameTF.setRequiredIndicatorVisible(true);
+        this.addComponent(nameTF);
 
-        TextField tf2 = new TextField("Street address");
-        tf2.setIcon(VaadinIcons.ROAD);
-        this.addComponent(tf2);
-
-        TextField tf3 = new TextField("Postal code");
-        tf3.setIcon(VaadinIcons.ENVELOPE);
-        this.addComponent(tf3);
+        TextField emailTF = new TextField("Email");
+        emailTF.setIcon(VaadinIcons.ENVELOPE);
+        this.addComponent(emailTF);
 // normally comes from validation by Binder
-        tf3.setComponentError(new UserError("Doh!"));
+//        emailTF.setComponentError(new UserError("Doh!"));
     }
 }

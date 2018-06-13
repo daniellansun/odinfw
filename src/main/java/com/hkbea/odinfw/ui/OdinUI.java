@@ -9,6 +9,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -34,6 +35,9 @@ public class OdinUI extends UI {
     private static final Locale LOCALE_EN_US = new Locale("en", "US");
 
     @Autowired
+    private SpringNavigator navigator;
+
+    @Autowired
     private ResourceBundleMessageSource resourceBundleMessageSource;
 
     @Override
@@ -41,6 +45,9 @@ public class OdinUI extends UI {
         Responsive.makeResponsive(this);
 
         HorizontalSplitPanel body = createBody(request);
+        navigator.init(this, (Panel) body.getSecondComponent());
+//        navigator.setErrorView(InaccessibleErrorView.class);
+
         VerticalLayout mainLayout = new VerticalLayout(createHeader(request), body, createFooter(request));
         mainLayout.setSizeFull();
 
@@ -91,9 +98,8 @@ public class OdinUI extends UI {
     }
 
     private Panel createContentPanel(VaadinRequest request) {
-        Panel contentPanel = new Panel();
+        Panel contentPanel = new ContentPanel();
         contentPanel.setId(ID_CONTENT_PANEL);
-        contentPanel.setSizeFull();
 
         return contentPanel;
     }
