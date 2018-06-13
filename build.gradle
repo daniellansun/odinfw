@@ -24,6 +24,7 @@ ext {
     vaadinVersion = '8.4.3'
     springBootVersion = '1.5.13.RELEASE'
     vaadinSpringBootStarterVersion = '3.0.1'
+    guavaVersion = '25.1-jre'
     h2Version = '1.4.197'
     junitVersion = '4.12'
 }
@@ -32,6 +33,7 @@ dependencies {
     compile "org.vaadin:viritin:$viritinVersion"
     compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringBootStarterVersion"
     compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "com.google.guava:guava:$guavaVersion"
     runtime "com.h2database:h2:$h2Version"
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
 

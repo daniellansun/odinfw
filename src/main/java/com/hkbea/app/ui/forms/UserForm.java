@@ -1,65 +1,44 @@
 package com.hkbea.app.ui.forms;
 
-import com.hkbea.app.domain.User;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Component;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import org.vaadin.viritin.form.AbstractForm;
-import org.vaadin.viritin.layouts.MHorizontalLayout;
-import org.vaadin.viritin.layouts.MVerticalLayout;
+import com.vaadin.ui.VerticalLayout;
+
+import javax.annotation.PostConstruct;
 
 import static com.hkbea.odinfw.ui.UiUtils.i18n;
 
 @SpringView(name="UserForm")
-public class UserForm extends AbstractForm<User> implements View {
-    private TextField id;
-    private TextField name;
-    private PasswordField password;
-    private TextField email;
+public class UserForm extends VerticalLayout implements View {
+    @PostConstruct
+    private void init() {
+        HorizontalLayout fieldsHL = new HorizontalLayout();
 
-    public UserForm() {
-        super(User.class);
+        TextField idTF = new TextField(i18n("text.id"));
+        idTF.setIcon(VaadinIcons.USER);
+        idTF.setRequiredIndicatorVisible(true);
+        fieldsHL.addComponent(idTF);
 
-        id = new TextField(i18n("text.id"));
-        id.setIcon(VaadinIcons.USER);
-        id.setRequiredIndicatorVisible(true);
+        TextField nameTF = new TextField(i18n("text.name"));
+        nameTF.setIcon(VaadinIcons.USER);
+        nameTF.setRequiredIndicatorVisible(true);
+        fieldsHL.addComponent(nameTF);
 
-        name = new TextField(i18n("text.name"));
-        name.setIcon(VaadinIcons.USER);
-        name.setRequiredIndicatorVisible(true);
+        PasswordField passwordTF = new PasswordField(i18n("text.password"));
+        passwordTF.setIcon(VaadinIcons.PASSWORD);
+        passwordTF.setRequiredIndicatorVisible(true);
+        fieldsHL.addComponent(passwordTF);
 
-        password = new PasswordField(i18n("text.password"));
-        password.setIcon(VaadinIcons.PASSWORD);
-        password.setRequiredIndicatorVisible(true);
+        Button queryBtn = new Button(i18n("text.query"));
+        fieldsHL.addComponent(queryBtn);
+        fieldsHL.setComponentAlignment(queryBtn, Alignment.BOTTOM_RIGHT);
 
-        email = new TextField(i18n("text.email"));
-        email.setIcon(VaadinIcons.ENVELOPE);
-    }
-
-    @Override
-    protected void bind() {
-        // DateField in Vaadin 8 uses LocalDate by default, the backend
-        // uses plain old java.util.Date, thus we need a converter, using
-        // built in helper here
-//        getBinder()
-//                .forMemberField(birthDay)
-//                .withConverter(new LocalDateToDateConverter());
-        super.bind();
-    }
-
-    @Override
-    protected Component createContent() {
-        return new MVerticalLayout(
-                new MHorizontalLayout(
-                        id,
-                        name,
-                        password,
-                        email
-                ).withWidth(""),
-                getToolbar()
-        ).withWidth("");
+        this.addComponent(fieldsHL);
     }
 }
