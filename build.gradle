@@ -27,6 +27,7 @@ ext {
 
 dependencies {
     compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringBootStarterVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
 
     testCompile "junit:junit:$junitVersion"
