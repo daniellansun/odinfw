@@ -13,6 +13,6 @@ public class OdinApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(OdinApplication.class);
+        SpringApplication.run(OdinApplication.class, args);
     }
 }

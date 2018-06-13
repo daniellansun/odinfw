@@ -22,12 +22,14 @@ ext {
     vaadinVersion = '8.4.3'
     springBootVersion = '1.5.13.RELEASE'
     vaadinSpringBootStarterVersion = '3.0.1'
+    h2Version = '1.4.197'
     junitVersion = '4.12'
 }
 
 dependencies {
     compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringBootStarterVersion"
     compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    runtime "com.h2database:h2:$h2Version"
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion"
 
     testCompile "junit:junit:$junitVersion"
