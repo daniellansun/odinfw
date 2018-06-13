@@ -75,14 +75,14 @@ public class MenuTree extends Tree<MenuTree.Menu> {
 
         if ("1".equals(menu.getId())) {
             return Arrays.asList(
-                    new MenuTree.Menu("11", "Manage Instruments", true, menu.getId())
+                    new MenuTree.Menu("11", "Manage Instruments", true, menu.getId(), "BlankForm")
             );
         }
 
         if ("2".equals(menu.getId())) {
             return Arrays.asList(
                     new MenuTree.Menu("21", "Manage Users", true, menu.getId(), "UserForm"),
-                    new MenuTree.Menu("22", "Manage Roles", true, menu.getId())
+                    new MenuTree.Menu("22", "Manage Roles", true, menu.getId(), "BlankForm")
             );
         }
 

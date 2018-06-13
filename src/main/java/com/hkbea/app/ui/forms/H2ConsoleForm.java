@@ -12,7 +12,7 @@ import java.net.URI;
 @SpringView(name="H2ConsoleForm")
 public class H2ConsoleForm extends VerticalLayout implements View {
     @PostConstruct
-    public void init() {
+    private void init() {
         WebFrame webFrame = new WebFrame();
         webFrame.setSizeFull();
         webFrame.setSource(createH2ConsoleLink());

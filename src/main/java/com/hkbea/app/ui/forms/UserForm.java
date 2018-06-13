@@ -13,6 +13,7 @@ public class UserForm extends FormLayout implements View {
     @PostConstruct
     private void init() {
         this.setMargin(true);
+        this.setSpacing(true);
         TextField nameTF = new TextField("Name");
         nameTF.setIcon(VaadinIcons.USER);
         nameTF.setRequiredIndicatorVisible(true);
