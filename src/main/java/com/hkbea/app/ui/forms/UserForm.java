@@ -1,4 +1,4 @@
-package com.hkbea.app.ui;
+package com.hkbea.app.ui.forms;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.UserError;

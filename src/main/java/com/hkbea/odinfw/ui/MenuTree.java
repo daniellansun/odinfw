@@ -88,7 +88,8 @@ public class MenuTree extends Tree<MenuTree.Menu> {
         if (null == menu) {
             return Arrays.asList(
                     new MenuTree.Menu("1", "Instrument Management", false, null),
-                    new MenuTree.Menu("2", "System Administration", false, null)
+                    new MenuTree.Menu("2", "System Administration", false, null),
+                    new MenuTree.Menu("3", "Dev Console", false, null)
             );
         }
 
@@ -102,6 +103,12 @@ public class MenuTree extends Tree<MenuTree.Menu> {
             return Arrays.asList(
                     new MenuTree.Menu("21", "Manage Users", true, menu.getId(), "UserForm"),
                     new MenuTree.Menu("22", "Manage Roles", true, menu.getId())
+            );
+        }
+
+        if ("3".equals(menu.getId())) {
+            return Arrays.asList(
+                    new MenuTree.Menu("31", "H2 Console", true, menu.getId(), "H2ConsoleForm")
             );
         }
 

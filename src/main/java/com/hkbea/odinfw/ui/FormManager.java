@@ -8,6 +8,6 @@ public class FormManager {
     private FormManager() {}
 
     public Component createForm(String shortName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        return (Component) Class.forName("com.hkbea.app.ui." + shortName).newInstance();
+        return (Component) Class.forName("com.hkbea.app.ui.forms." + shortName).newInstance();
     }
 }
