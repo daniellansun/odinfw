@@ -11,6 +11,10 @@ import java.util.Optional;
  */
 public class UiUtils {
 
+    public static String i18n(String code, String... args) {
+        return ((OdinUI) UI.getCurrent()).i18n(code, args);
+    }
+
     public static Optional<Component> findComponentById(String id) {
         return findComponentById(UI.getCurrent(), id);
     }
