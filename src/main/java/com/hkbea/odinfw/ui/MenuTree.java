@@ -67,17 +67,17 @@ public class MenuTree extends Tree<MenuTree.Menu> {
     private List<Menu> findSubMenus(Menu menu) {
         if (null == menu) {
             return Arrays.asList(
-                    new MenuTree.Menu("1", "Instrument Management", false, null),
+//                    new MenuTree.Menu("1", "Instrument Management", false, null),
                     new MenuTree.Menu("2", "System Administration", false, null),
                     new MenuTree.Menu("3", "Dev Console", false, null)
             );
         }
 
-        if ("1".equals(menu.getId())) {
-            return Arrays.asList(
-                    new MenuTree.Menu("11", "Manage Instruments", true, menu.getId(), "BlankForm")
-            );
-        }
+//        if ("1".equals(menu.getId())) {
+//            return Arrays.asList(
+//                    new MenuTree.Menu("11", "Manage Instruments", true, menu.getId(), "BlankForm")
+//            );
+//        }
 
         if ("2".equals(menu.getId())) {
             return Arrays.asList(
