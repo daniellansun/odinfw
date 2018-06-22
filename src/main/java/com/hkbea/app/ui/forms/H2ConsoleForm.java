@@ -1,24 +1,29 @@
 package com.hkbea.app.ui.forms;
 
 import com.hkbea.odinfw.ui.WebFrame;
-import com.vaadin.navigator.View;
+import com.hkbea.odinfw.ui.forms.BaseForm;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-import javax.annotation.PostConstruct;
 import java.net.URI;
 
 @SpringView(name="H2ConsoleForm")
-public class H2ConsoleForm extends VerticalLayout implements View {
-    @PostConstruct
-    private void init() {
+public class H2ConsoleForm extends BaseForm {
+    @Override
+    protected Component getContentComponent() {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setMargin(false);
+
         WebFrame webFrame = new WebFrame();
         webFrame.setSizeFull();
         webFrame.setSource(createH2ConsoleLink());
-        this.addComponent(webFrame);
-        this.setHeight("100%");
-        this.setExpandRatio(webFrame, 1);
+        verticalLayout.addComponent(webFrame);
+        verticalLayout.setHeight("100%");
+        verticalLayout.setExpandRatio(webFrame, 1);
+
+        return verticalLayout;
     }
 
     private String createH2ConsoleLink() {

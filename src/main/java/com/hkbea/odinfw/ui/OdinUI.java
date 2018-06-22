@@ -1,9 +1,8 @@
 package com.hkbea.odinfw.ui;
 
+import com.hkbea.app.ui.forms.LoginForm;
 import com.vaadin.annotations.Title;
-import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
-import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
@@ -12,23 +11,25 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 
-@Title("Odin Framework")
 @SpringUI
-public class OdinUI extends UI {
-    public static final String ID_CONTENT_PANEL = "contentPanel";
+public class OdinUI extends UI implements ApplicationContextAware {
     private static final String ZW = "中文";
     private static final String EN = "English";
     private static final Locale LOCALE_ZH_CN = new Locale("zh", "CN");
@@ -40,26 +41,45 @@ public class OdinUI extends UI {
     @Autowired
     private ResourceBundleMessageSource resourceBundleMessageSource;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+    private ApplicationContext applicationContext;
+
     @Override
     protected void init(VaadinRequest request) {
         Responsive.makeResponsive(this);
 
-        HorizontalSplitPanel body = createBody(request);
-        navigator.init(this, (Panel) body.getSecondComponent());
-//        navigator.setErrorView(InaccessibleErrorView.class);
+        this.getPage().setTitle(i18n("app.title"));
 
-        VerticalLayout mainLayout = new VerticalLayout(createHeader(request), body, createFooter(request));
+        Panel contentPanel = createContentPanel();
+
+        VerticalLayout mainLayout = new VerticalLayout(createHeader(), contentPanel, createFooter());
+
         mainLayout.setSizeFull();
-
-        mainLayout.setExpandRatio(body, 1);
-
+        mainLayout.setExpandRatio(contentPanel, 1);
         mainLayout.setMargin(new MarginInfo(true, false));
+        mainLayout.setHeight("100%");
 
         this.setContent(mainLayout);
-        mainLayout.setHeight("100%");
+
+        navigator.init(this, contentPanel);
+//        navigator.setErrorView(InaccessibleErrorView.class);
     }
 
-    private HorizontalLayout createHeader(VaadinRequest request) {
+    private Panel createContentPanel() {
+        Panel contentPanel = new ContentPanel();
+
+        return contentPanel;
+    }
+
+    @EventListener
+    public void onLoginEvent(LoginForm.LoginEvent event) {
+        navigator.navigateTo("MainForm");
+    }
+
+
+    private HorizontalLayout createHeader() {
         HorizontalLayout titleBar = new HorizontalLayout();
         titleBar.setWidth("100%");
 
@@ -67,7 +87,7 @@ public class OdinUI extends UI {
         titleBar.addComponent(title);
         titleBar.setExpandRatio(title, 1.0f); // Expand
 
-        NativeSelect languageSelect = createLanguageSelect(request);
+        NativeSelect languageSelect = createLanguageSelect();
 
 //        languageSelect.setSizeUndefined(); // Take minimum space
         titleBar.addComponent(languageSelect);
@@ -75,36 +95,7 @@ public class OdinUI extends UI {
         return titleBar;
     }
 
-    private HorizontalSplitPanel createBody(VaadinRequest request) {
-        HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
-        Page currentPage = UI.getCurrent().getPage();
-        int width = currentPage.getBrowserWindowWidth();
-        int height = currentPage.getBrowserWindowHeight();
-
-        horizontalSplitPanel.setSplitPosition(Math.min(width, height) * 0.39f, Sizeable.Unit.PIXELS, false);
-        horizontalSplitPanel.setFirstComponent(createMenuTreePanel(request));
-        horizontalSplitPanel.setSecondComponent(createContentPanel(request));
-
-        return horizontalSplitPanel;
-    }
-
-    private Panel createMenuTreePanel(VaadinRequest request) {
-        MenuTree menuTree = new MenuTree();
-
-        Panel treePanel = new Panel(menuTree);
-        treePanel.setHeight("100%");
-
-        return treePanel;
-    }
-
-    private Panel createContentPanel(VaadinRequest request) {
-        Panel contentPanel = new ContentPanel();
-        contentPanel.setId(ID_CONTENT_PANEL);
-
-        return contentPanel;
-    }
-
-    private HorizontalLayout createFooter(VaadinRequest request) {
+    private HorizontalLayout createFooter() {
         HorizontalLayout footer = new HorizontalLayout();
         footer.setWidth("100%");
 
@@ -117,7 +108,7 @@ public class OdinUI extends UI {
         return footer;
     }
 
-    private NativeSelect createLanguageSelect(VaadinRequest request) {
+    private NativeSelect createLanguageSelect() {
         NativeSelect<String> languageSelect = new NativeSelect<>(i18n("select.language"), Arrays.asList(EN, ZW));
         languageSelect.setWidth("105px");
         languageSelect.setEmptySelectionAllowed(false);
@@ -138,7 +129,7 @@ public class OdinUI extends UI {
                 session.setLocale(LOCALE_EN_US);
             }
 
-            this.getPage().reload();
+            UI.getCurrent().getPage().reload();
         });
 
         return languageSelect;
@@ -149,5 +140,10 @@ public class OdinUI extends UI {
         Locale locale = VaadinSession.getCurrent().getLocale();
 
         return resourceBundleMessageSource.getMessage(code, args, locale);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

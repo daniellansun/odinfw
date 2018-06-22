@@ -2,37 +2,41 @@ package com.hkbea.app.ui.forms;
 
 import com.hkbea.app.domain.User;
 import com.hkbea.app.repositories.UserRepository;
+import com.hkbea.odinfw.ui.forms.BaseForm;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.View;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
 
 import java.util.List;
 
 import static com.hkbea.odinfw.ui.UiUtils.i18n;
 
 @SpringView(name="UserForm")
-public class UserForm extends VerticalLayout implements View {
+public class UserForm extends BaseForm {
     private Grid<User> grid = new Grid<>();
 
     @Autowired
     private UserRepository userRepository;
 
-    @PostConstruct
-    private void init() {
-        Panel fieldInputsPanel = createFieldInputsPanel();
-        this.addComponent(fieldInputsPanel);
+    @Override
+    protected Component getContentComponent() {
+        VerticalLayout verticalLayout = new VerticalLayout();
 
+        verticalLayout.setMargin(new MarginInfo(false, true, false, true));
+
+        Panel fieldInputsPanel = createFieldInputsPanel();
+        verticalLayout.addComponent(fieldInputsPanel);
+
+        grid.setId("");
         grid.setWidth("100%");
         grid.setVisible(false);
 
@@ -40,7 +44,9 @@ public class UserForm extends VerticalLayout implements View {
         grid.addColumn(User::getName).setCaption(i18n("text.name"));
         grid.addColumn(User::getPassword).setCaption(i18n("text.password"));
 
-        this.addComponent(grid);
+        verticalLayout.addComponent(grid);
+
+        return verticalLayout;
     }
 
     private Panel createFieldInputsPanel() {
@@ -66,7 +72,6 @@ public class UserForm extends VerticalLayout implements View {
             List<User> userList = userRepository.selectAll(new User(idTF.getValue(), nameTF.getValue(), null));
 
             grid.setItems(userList);
-
             grid.setVisible(true);
         });
         fieldsHL.addComponent(queryBtn);

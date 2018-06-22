@@ -1,6 +1,5 @@
 package com.hkbea.odinfw;
 
-import com.google.common.eventbus.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -16,10 +15,5 @@ public class OdinConfiguration {
         rbms.setBasename(MESSAGE_SOURCE_BASENAME);
 
         return rbms;
-    }
-
-    @Bean
-    public EventBus eventBus() {
-        return new EventBus();
     }
 }
