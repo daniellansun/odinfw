@@ -10,6 +10,9 @@ import java.util.Optional;
  * Utilities for handling UI
  */
 public class UiUtils {
+    public static OdinUI getUI() {
+        return (OdinUI) UI.getCurrent();
+    }
 
     public static String i18n(String code, String... args) {
         return ((OdinUI) UI.getCurrent()).i18n(code, args);

@@ -1,12 +1,11 @@
 package com.hkbea.odinfw.ui;
 
+import com.hkbea.odinfw.repositories.MenuRepository;
 import com.vaadin.data.TreeData;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.UI;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,8 +21,8 @@ public class MenuTree extends Tree<MenuTree.Menu> {
             Menu item = event.getItem();
 
             if (item.isLeaf()) {
-                if (null != item.formName) {
-                    UI.getCurrent().getNavigator().navigateTo(item.formName);
+                if (null != item.getFormName()) {
+                    UI.getCurrent().getNavigator().navigateTo(item.getFormName());
                 }
             } else {
                 addSubMenus(item);
@@ -60,39 +59,17 @@ public class MenuTree extends Tree<MenuTree.Menu> {
     }
 
     /**
-     * TODO menu data should be loaded from DB
      * @param menu
      * @return
      */
     private List<Menu> findSubMenus(Menu menu) {
+        MenuRepository menuRepository = UiUtils.getUI().getApplicationContext().getBean(MenuRepository.class);
+
         if (null == menu) {
-            return Arrays.asList(
-//                    new MenuTree.Menu("1", "Instrument Management", false, null),
-                    new MenuTree.Menu("2", "System Administration", false, null),
-                    new MenuTree.Menu("3", "Dev Console", false, null)
-            );
+            return menuRepository.selectByParentId("0");
         }
 
-//        if ("1".equals(menu.getId())) {
-//            return Arrays.asList(
-//                    new MenuTree.Menu("11", "Manage Instruments", true, menu.getId(), "TodoForm")
-//            );
-//        }
-
-        if ("2".equals(menu.getId())) {
-            return Arrays.asList(
-                    new MenuTree.Menu("21", "Manage Users", true, menu.getId(), "UserForm"),
-                    new MenuTree.Menu("22", "Manage Roles", true, menu.getId(), "TodoForm")
-            );
-        }
-
-        if ("3".equals(menu.getId())) {
-            return Arrays.asList(
-                    new MenuTree.Menu("31", "H2 Console", true, menu.getId(), "H2ConsoleForm")
-            );
-        }
-
-        return Collections.emptyList();
+        return menuRepository.selectByParentId(menu.getId());
     }
 
     public static class Menu {

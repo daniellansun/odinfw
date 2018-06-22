@@ -9,5 +9,6 @@
     </typeAliases>
     <mappers>
         <mapper resource="mappers/UserMapper.xml"/>
+        <mapper resource="mappers/MenuMapper.xml"/>
     </mappers>
 </configuration>

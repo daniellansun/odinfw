@@ -1,10 +1,17 @@
-insert into USER_DAT (id, name, password) values ('dan2', 'Daniel', '******');
-insert into USER_DAT (id, name, password) values ('pau2', 'Paul', '******');
-insert into USER_DAT (id, name, password) values ('joh3', 'John', '******');
-insert into USER_DAT (id, name, password) values ('ali3', 'Alice', '******');
-insert into USER_DAT (id, name, password) values ('pet2', 'Peter', '******');
-insert into USER_DAT (id, name, password) values ('joc5', 'Jochen', '******');
-insert into USER_DAT (id, name, password) values ('gra5', 'Grace', '******');
-insert into USER_DAT (id, name, password) values ('sam6', 'Sam', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('dan2', 'Daniel', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('pau2', 'Paul', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('joh3', 'John', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('ali3', 'Alice', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('pet2', 'Peter', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('joc5', 'Jochen', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('gra5', 'Grace', '******');
+INSERT INTO USER_DAT (ID, NAME, PASSWORD) VALUES ('sam6', 'Sam', '******');
 
-commit;
+INSERT INTO FW_MENU(ID , TEXT, LEAF, PARENT_ID, FORM_NAME) VALUES ('2', 'System Administration', '0', '0', NULL);
+INSERT INTO FW_MENU(ID , TEXT, LEAF, PARENT_ID, FORM_NAME) VALUES ('3', 'Dev Console', '0', '0', NULL);
+INSERT INTO FW_MENU(ID , TEXT, LEAF, PARENT_ID, FORM_NAME) VALUES ('21', 'Manage Users', '1', '2', 'UserForm');
+INSERT INTO FW_MENU(ID , TEXT, LEAF, PARENT_ID, FORM_NAME) VALUES ('22', 'Manage Roles', '1', '2', 'TodoForm');
+INSERT INTO FW_MENU(ID , TEXT, LEAF, PARENT_ID, FORM_NAME) VALUES ('31', 'H2 Console', '1', '3', 'H2ConsoleForm');
+
+
+COMMIT;

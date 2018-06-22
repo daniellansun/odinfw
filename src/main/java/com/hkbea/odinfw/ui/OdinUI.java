@@ -1,7 +1,6 @@
 package com.hkbea.odinfw.ui;
 
 import com.hkbea.app.ui.forms.LoginForm;
-import com.vaadin.annotations.Title;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
@@ -145,5 +144,9 @@ public class OdinUI extends UI implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return this.applicationContext;
     }
 }
