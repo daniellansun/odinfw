@@ -75,18 +75,18 @@ public class MenuTree extends Tree<MenuTree.Menu> {
     public static class Menu {
         private String id;
         private String text;
-        private boolean leaf;
+        private String leaf;
         private String parentId;
         private String formName;
 
-        public Menu(String id, String text, boolean leaf, String parentId) {
+        public Menu(String id, String text, String leaf, String parentId) {
             this.id = id;
             this.text = text;
             this.leaf = leaf;
             this.parentId = parentId;
         }
 
-        public Menu(String id, String text, boolean leaf, String parentId, String formName) {
+        public Menu(String id, String text, String leaf, String parentId, String formName) {
             this(id, text, leaf, parentId);
             this.formName = formName;
         }
@@ -108,10 +108,10 @@ public class MenuTree extends Tree<MenuTree.Menu> {
         }
 
         public boolean isLeaf() {
-            return leaf;
+            return "1".equals(leaf);
         }
 
-        public void setLeaf(boolean leaf) {
+        public void setLeaf(String leaf) {
             this.leaf = leaf;
         }
 

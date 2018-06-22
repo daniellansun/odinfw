@@ -21,7 +21,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MenuMapper">
 
-    <select id="selectByParentId" resultType="java.util.LinkedHashMap">
+    <select id="selectByParentId" resultType="com.hkbea.odinfw.ui.MenuTree$Menu">
         SELECT t.* from FW_MENU t
         WHERE t.PARENT_ID = #{parentId}
     </select>
