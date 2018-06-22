@@ -13,9 +13,12 @@ public class MenuTree extends Tree<MenuTree.Menu> {
     public MenuTree() {
         List<Menu> rootMenuList = addSubMenus(null); // add root menus
 
-        if (rootMenuList.size() > 0) {
-            addSubMenus(rootMenuList.get(0)); // add sub menus for the first root by default
+        for (Menu rootMenu : rootMenuList) {
+            addSubMenus(rootMenu);
         }
+//        if (rootMenuList.size() > 0) {
+//            addSubMenus(rootMenuList.get(0)); // add sub menus for the first root by default
+//        }
 
         this.addItemClickListener(event -> {
             Menu item = event.getItem();
