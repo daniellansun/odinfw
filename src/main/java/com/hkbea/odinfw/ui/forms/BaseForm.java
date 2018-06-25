@@ -1,6 +1,7 @@
 package com.hkbea.odinfw.ui.forms;
 
 import com.hkbea.odinfw.ui.MenuTree;
+import com.hkbea.odinfw.ui.UiUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
 import com.vaadin.server.Sizeable;
@@ -56,6 +57,10 @@ public abstract class BaseForm extends VerticalLayout implements View {
         menuTree.setHeight("100%");
 
         return menuTree;
+    }
+
+    protected String i18n(String code, String... args) {
+        return UiUtils.i18n(code, args);
     }
 
     protected abstract Component getContentComponent();
