@@ -1,7 +1,6 @@
-package com.hkbea.app.ui.forms;
+package com.hkbea.odinfw.ui.forms;
 
 import com.hkbea.odinfw.ui.WebFrame;
-import com.hkbea.odinfw.ui.forms.BaseForm;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
