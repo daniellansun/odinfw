@@ -34,5 +34,9 @@ public abstract class WebForm extends BaseForm {
         return urlStr;
     }
 
+    protected String createWebURL(String path) {
+        return String.format("%s%s", getBaseUrl(), path);
+    }
+
     protected abstract String createWebURL();
 }
