@@ -21,7 +21,6 @@ repositories {
 }
 
 ext {
-    viritinVersion = '2.5'
     vaadinVersion = '8.4.4'
     springBootVersion = '2.0.3.RELEASE'
     vaadinSpringBootStarterVersion = '3.0.1'
@@ -32,7 +31,6 @@ ext {
 }
 
 dependencies {
-    compile "org.vaadin:viritin:$viritinVersion"
     compile "com.vaadin:vaadin-spring-boot-starter:$vaadinSpringBootStarterVersion"
     compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
     compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatisStarterVersion"

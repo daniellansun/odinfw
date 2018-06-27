@@ -16,6 +16,7 @@ public abstract class WebForm extends BaseForm {
         WebFrame webFrame = new WebFrame();
         webFrame.setSizeFull();
         webFrame.setSource(createWebURL());
+
         verticalLayout.addComponent(webFrame);
         verticalLayout.setHeight("100%");
         verticalLayout.setExpandRatio(webFrame, 1);
