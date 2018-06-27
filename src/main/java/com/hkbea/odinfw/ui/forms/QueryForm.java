@@ -26,9 +26,13 @@ public abstract class QueryForm<T> extends BaseForm {
     }
 
     private Panel createFieldInputsPanel() {
-        Panel fieldInputsPanel = new Panel(i18n("text.inputfields"), createFieldInputsLayout());
+        Panel fieldInputsPanel = new Panel(createFieldInputsTitle(), createFieldInputsLayout());
 
         return fieldInputsPanel;
+    }
+
+    protected String createFieldInputsTitle() {
+        return i18n("text.inputfields");
     }
 
     protected abstract AbstractOrderedLayout createFieldInputsLayout();
