@@ -6,6 +6,7 @@
 <configuration>
     <typeAliases>
         <package name="com.hkbea.app.domain"/>
+        <package name="com.hkbea.odinfw.domain"/>
     </typeAliases>
     <mappers>
         <mapper resource="mappers/FwMenuMapper.xml"/>

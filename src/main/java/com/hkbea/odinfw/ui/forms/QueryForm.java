@@ -18,9 +18,12 @@ public abstract class QueryForm<T> extends BaseForm {
         verticalLayout.addComponent(createFieldInputsPanel());
 
         Grid<T> resultGrid = createResultGrid();
-        resultGrid.setWidth("100%");
-        resultGrid.setVisible(false);
-        verticalLayout.addComponent(resultGrid);
+
+        if (null != resultGrid) {
+            resultGrid.setWidth("100%");
+            resultGrid.setVisible(false);
+            verticalLayout.addComponent(resultGrid);
+        }
 
         return verticalLayout;
     }

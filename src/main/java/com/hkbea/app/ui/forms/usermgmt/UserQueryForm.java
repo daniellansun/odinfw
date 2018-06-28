@@ -58,7 +58,7 @@ public class UserQueryForm extends QueryForm<UserDat> {
 //        fieldsHL.addComponent(passwordTF);
 
         Button queryBtn = new Button(i18n("text.query"));
-        queryBtn.addClickListener((Button.ClickListener) event -> {
+        queryBtn.addClickListener(event -> {
             UserDatExample ude = new UserDatExample();
             ude.createCriteria()
                     .andIdLike(null == user.getId() ? "%" : user.getId())

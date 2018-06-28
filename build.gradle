@@ -21,7 +21,6 @@ allprojects {
         mavenCentral()
         maven { url 'http://vaadin.com/nexus/content/repositories/vaadin-addons/' }
     }
-
 }
 
 ext {
@@ -32,6 +31,8 @@ ext {
     druidStarterVersion = '1.1.10'
     h2Version = '1.4.197'
     junitVersion = '4.12'
+
+    mybatisGeneratorVersion = '1.3.6'
 }
 
 dependencies {
@@ -44,6 +45,8 @@ dependencies {
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+
+    compile "org.mybatis.generator:mybatis-generator-core:$mybatisGeneratorVersion"
 }
 
 dependencyManagement {
