@@ -1,29 +1,27 @@
 package com.hkbea.odinfw.ui;
 
-import com.hkbea.odinfw.repositories.MenuRepository;
+import com.hkbea.odinfw.domain.FwMenu;
+import com.hkbea.odinfw.domain.FwMenuExample;
+import com.hkbea.odinfw.repositories.FwMenuMapper;
 import com.vaadin.data.TreeData;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.UI;
 
 import java.util.List;
-import java.util.Objects;
 
-public class MenuTree extends Tree<MenuTree.Menu> {
+public class MenuTree extends Tree<FwMenu> {
     public MenuTree() {
-        List<Menu> rootMenuList = addSubMenus(null); // add root menus
+        List<FwMenu> rootMenuList = addSubMenus(null); // add root menus
 
-        for (Menu rootMenu : rootMenuList) {
+        for (FwMenu rootMenu : rootMenuList) {
             addSubMenus(rootMenu);
         }
-//        if (rootMenuList.size() > 0) {
-//            addSubMenus(rootMenuList.get(0)); // add sub menus for the first root by default
-//        }
 
         this.addItemClickListener(event -> {
-            Menu item = event.getItem();
+            FwMenu item = event.getItem();
 
-            if (item.isLeaf()) {
+            if ("1".equals(item.getLeaf())) {
                 if (null != item.getFormName()) {
                     UI.getCurrent().getNavigator().navigateTo(item.getFormName());
                 }
@@ -33,12 +31,12 @@ public class MenuTree extends Tree<MenuTree.Menu> {
         });
     }
 
-    private List<Menu> addSubMenus(Menu menu) {
-        List<Menu> subMenuList = findSubMenus(menu);
+    private List<FwMenu> addSubMenus(FwMenu menu) {
+        List<FwMenu> subMenuList = findSubMenus(menu);
 
-        TreeData<Menu> treeData = this.getTreeData();
+        TreeData<FwMenu> treeData = this.getTreeData();
 
-        for (Menu subMenu : subMenuList) {
+        for (FwMenu subMenu : subMenuList) {
             if (treeData.contains(subMenu)) {
                 continue;
             }
@@ -47,7 +45,7 @@ public class MenuTree extends Tree<MenuTree.Menu> {
         }
 
         this.setItemIconGenerator(item -> {
-            if (!item.isLeaf()) {
+            if (!"1".equals(item.getLeaf())) {
                 return VaadinIcons.MENU;
             }
 
@@ -65,91 +63,19 @@ public class MenuTree extends Tree<MenuTree.Menu> {
      * @param menu
      * @return
      */
-    private List<Menu> findSubMenus(Menu menu) {
-        MenuRepository menuRepository = UiUtils.getUI().getApplicationContext().getBean(MenuRepository.class);
+    private List<FwMenu> findSubMenus(FwMenu menu) {
+        FwMenuMapper fwMenuMapper = UiUtils.getUI().getApplicationContext().getBean(FwMenuMapper.class);
+        FwMenuExample fme = new FwMenuExample();
 
+        String parentId;
         if (null == menu) {
-            return menuRepository.selectByParentId("0");
+            parentId = "0";
+        } else {
+            parentId = menu.getId();
         }
 
-        return menuRepository.selectByParentId(menu.getId());
-    }
+        fme.createCriteria().andParentIdEqualTo(parentId);
 
-    public static class Menu {
-        private String id;
-        private String text;
-        private String leaf;
-        private String parentId;
-        private String formName;
-
-        public Menu(String id, String text, String leaf, String parentId) {
-            this.id = id;
-            this.text = text;
-            this.leaf = leaf;
-            this.parentId = parentId;
-        }
-
-        public Menu(String id, String text, String leaf, String parentId, String formName) {
-            this(id, text, leaf, parentId);
-            this.formName = formName;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public boolean isLeaf() {
-            return "1".equals(leaf);
-        }
-
-        public void setLeaf(String leaf) {
-            this.leaf = leaf;
-        }
-
-        public String getParentId() {
-            return parentId;
-        }
-
-        public void setParentId(String parentId) {
-            this.parentId = parentId;
-        }
-
-        public String getFormName() {
-            return formName;
-        }
-
-        public void setFormName(String formName) {
-            this.formName = formName;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Menu menu = (Menu) o;
-            return Objects.equals(id, menu.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id);
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
+        return fwMenuMapper.selectByExample(fme);
     }
 }

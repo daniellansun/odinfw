@@ -1,6 +1,5 @@
 package com.hkbea.odinfw.addons.paginator;
 
-import com.vaadin.data.HasValue;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.icons.VaadinIcons;
@@ -127,10 +126,10 @@ public class Paginator extends HorizontalLayout {
         itemsPerPageSelect.setEmptySelectionAllowed(false);
         itemsPerPageSelect.setWidth("80px");
         itemsPerPageSelect.setStyleName(ValoTheme.COMBOBOX_SMALL);
-        itemsPerPageSelect.addValueChangeListener((HasValue.ValueChangeListener) event -> {
-            int pageSize = (Integer) event.getValue();
+        itemsPerPageSelect.addValueChangeListener(event -> {
+            int pageSize = event.getValue();
             if (pageSize == paginationResource.limit()) return;
-            paginationResource.setLimit((Integer) event.getValue());
+            paginationResource.setLimit(event.getValue());
             paginationResource.setPage(1);
             firePagedChangedEvent();
         });
@@ -187,7 +186,7 @@ public class Paginator extends HorizontalLayout {
             }
         });
 
-        currentPageTextField.addValueChangeListener((HasValue.ValueChangeListener) event -> {
+        currentPageTextField.addValueChangeListener(event -> {
             currentPageChangedEvent();
         });
 

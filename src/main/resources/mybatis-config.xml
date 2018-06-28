@@ -8,7 +8,7 @@
         <package name="com.hkbea.app.domain"/>
     </typeAliases>
     <mappers>
-        <mapper resource="mappers/UserMapper.xml"/>
-        <mapper resource="mappers/MenuMapper.xml"/>
+        <mapper resource="mappers/FwMenuMapper.xml"/>
+        <mapper resource="mappers/UserDatMapper.xml"/>
     </mappers>
 </configuration>

@@ -1,7 +1,8 @@
 package com.hkbea.app.ui.forms.usermgmt;
 
-import com.hkbea.app.domain.User;
-import com.hkbea.app.repositories.UserRepository;
+import com.hkbea.app.domain.UserDat;
+import com.hkbea.app.domain.UserDatExample;
+import com.hkbea.app.repositories.UserDatMapper;
 import com.hkbea.odinfw.ui.forms.QueryForm;
 import com.vaadin.annotations.PropertyId;
 import com.vaadin.data.Binder;
@@ -18,16 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @SpringView(name="UserQueryForm")
-public class UserQueryForm extends QueryForm<User> {
+public class UserQueryForm extends QueryForm<UserDat> {
     @PropertyId("id")
     private TextField idTF = new TextField(i18n("text.id"));
     @PropertyId("name")
     private TextField nameTF = new TextField(i18n("text.name"));
 
-    private Grid<User> grid = new Grid<>();
+    private Grid<UserDat> grid = new Grid<>();
 
     @Autowired
-    private UserRepository userRepository;
+    private UserDatMapper userDatMapper;
 
     @Override
     protected AbstractOrderedLayout createFieldInputsLayout() {
@@ -42,10 +43,10 @@ public class UserQueryForm extends QueryForm<User> {
         nameTF.setRequiredIndicatorVisible(true);
         fieldsHL.addComponent(nameTF);
 
-        Binder<User> binder = new Binder<>(User.class);
+        Binder<UserDat> binder = new Binder<>(UserDat.class);
         binder.bindInstanceFields(this);
 
-        final User user = new User();
+        final UserDat user = new UserDat();
 //        user.id = "hello";
 //        user.name = "world";
 
@@ -58,9 +59,14 @@ public class UserQueryForm extends QueryForm<User> {
 
         Button queryBtn = new Button(i18n("text.query"));
         queryBtn.addClickListener((Button.ClickListener) event -> {
-            List<User> userList = userRepository.selectAll(user);
+            UserDatExample ude = new UserDatExample();
+            ude.createCriteria()
+                    .andIdLike(null == user.getId() ? "%" : user.getId())
+                    .andNameLike(null == user.getName() ? "%" : user.getName());
 
-            grid.setItems(userList);
+            List<UserDat> userDatList = userDatMapper.selectByExample(ude);
+
+            grid.setItems(userDatList);
             grid.setVisible(true);
         });
         fieldsHL.addComponent(queryBtn);
@@ -70,10 +76,10 @@ public class UserQueryForm extends QueryForm<User> {
     }
 
     @Override
-    protected Grid<User> createResultGrid() {
-        grid.addColumn(User::getId).setCaption(i18n("text.id"));
-        grid.addColumn(User::getName).setCaption(i18n("text.name"));
-        grid.addColumn(User::getPassword).setCaption(i18n("text.password"));
+    protected Grid<UserDat> createResultGrid() {
+        grid.addColumn(UserDat::getId).setCaption(i18n("text.id"));
+        grid.addColumn(UserDat::getName).setCaption(i18n("text.name"));
+        grid.addColumn(UserDat::getPassword).setCaption(i18n("text.password"));
 
         return grid;
     }
