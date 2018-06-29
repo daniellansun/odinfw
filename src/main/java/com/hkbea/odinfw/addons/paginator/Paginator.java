@@ -200,10 +200,19 @@ public class Paginator extends HorizontalLayout {
 
     protected void currentPageChangedEvent() {
         try {
-            Integer.parseInt(currentPageTextField.getValue());
             int currentPage = Integer.valueOf(currentPageTextField.getValue());
             int pageNumber = paginationResource.page();
             if (currentPage == pageNumber) return;
+
+            int totalPage = paginationResource.totalPage();
+            if (currentPage > totalPage) {
+                currentPage = totalPage;
+            } else if (currentPage < 1) {
+                currentPage = 1;
+            }
+
+            currentPageTextField.setValue(String.valueOf(currentPage));
+
             paginationResource.setPage(currentPage);
             firePagedChangedEvent();
         } catch (Exception e) {
