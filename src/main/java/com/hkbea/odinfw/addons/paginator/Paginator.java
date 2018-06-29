@@ -1,5 +1,6 @@
 package com.hkbea.odinfw.addons.paginator;
 
+import com.hkbea.odinfw.ui.UiUtils;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.icons.VaadinIcons;
@@ -14,13 +15,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Paginator extends HorizontalLayout {
     private static final long serialVersionUID = 4260303412862903814L;
     private PaginationResource paginationResource;
 
-    final List<PaginationChangeListener> listeners = new ArrayList<>();
+    final List<PaginationChangeListener> listeners = new LinkedList<>();
 
     HorizontalLayout itemsPerPage;
     HorizontalLayout pageControls;
@@ -35,10 +37,14 @@ public class Paginator extends HorizontalLayout {
     final Button nextButton = new Button(VaadinIcons.ARROW_CIRCLE_RIGHT_O);
     final Button lastButton = new Button(VaadinIcons.ARROW_CIRCLE_RIGHT);
 
-    public Paginator() {
+    public static Paginator createPaginator(long total, int page, int limit) {
+        final PaginationResource paginationResource = PaginationResource.newBuilder().setTotal(total).setPage(page).setLimit(limit).build();
+        final Paginator pagination = new Paginator(paginationResource);
+        pagination.setItemsPerPage(10, 20, 50, 100);
+        return pagination;
     }
 
-    public Paginator(PaginationResource paginationResource) {
+    private Paginator(PaginationResource paginationResource) {
         setWidth("100%");
         setSpacing(true);
         init(paginationResource);
@@ -121,7 +127,7 @@ public class Paginator extends HorizontalLayout {
     }
 
     private HorizontalLayout createItemsPerPage() {
-        final Label itemsPerPageLabel = new Label("&nbsp;Items per page", ContentMode.HTML);
+        final Label itemsPerPageLabel = new Label("&nbsp;" + UiUtils.i18n("paginator.items.per.page"), ContentMode.HTML);
         itemsPerPageSelect.setTextInputAllowed(false);
         itemsPerPageSelect.setEmptySelectionAllowed(false);
         itemsPerPageSelect.setWidth("80px");
@@ -146,25 +152,10 @@ public class Paginator extends HorizontalLayout {
         nextButton.setStyleName(ValoTheme.BUTTON_LINK);
         lastButton.setStyleName(ValoTheme.BUTTON_LINK);
 
-        firstButton.addClickListener(e -> {
-            PaginationResource first = paginationResource.first();
-            buttonClickEvent(first);
-        });
-
-        previousButton.addClickListener(e -> {
-            PaginationResource previous = paginationResource.previous();
-            buttonClickEvent(previous);
-        });
-
-        nextButton.addClickListener(e -> {
-            PaginationResource next = paginationResource.next();
-            buttonClickEvent(next);
-        });
-
-        lastButton.addClickListener(e -> {
-            PaginationResource last = paginationResource.last();
-            buttonClickEvent(last);
-        });
+        firstButton.addClickListener(e -> buttonClickEvent(paginationResource.first()));
+        previousButton.addClickListener(e -> buttonClickEvent(paginationResource.previous()));
+        nextButton.addClickListener(e -> buttonClickEvent(paginationResource.next()));
+        lastButton.addClickListener(e -> buttonClickEvent(paginationResource.last()));
 
         HorizontalLayout pageFields = createPageFields();
 
@@ -228,15 +219,20 @@ public class Paginator extends HorizontalLayout {
         firePagedChangedEvent();
     }
 
+    public void fireFirstButtonClickedEvent() {
+        boolean enabled = firstButton.isEnabled();
+        firstButton.setEnabled(true);
+        firstClick();
+        firstButton.setEnabled(enabled);
+    }
+
     protected void firePagedChangedEvent() {
         buttonsEnabled();
         currentPageTextField.setValue(String.valueOf(paginationResource.page()));
         totalPageLabel.setValue(String.valueOf(paginationResource.totalPage()));
-        if (listeners != null) {
-            for (int i = 0; i < listeners.size(); i++) {
-                PaginationChangeListener listener = listeners.get(i);
-                listener.changed(paginationResource);
-            }
+        for (int i = 0; i < listeners.size(); i++) {
+            PaginationChangeListener listener = listeners.get(i);
+            listener.changed(paginationResource);
         }
     }
 

@@ -4,7 +4,6 @@ import com.hkbea.odinfw.generators.MyBatisGenerator;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import org.mybatis.generator.exception.InvalidConfigurationException;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @SpringView(name="MyBatisGeneratorForm")
-public class MyBatisGeneratorForm extends QueryForm<Object> {
+public class MyBatisGeneratorForm extends BlankQueryForm<Object, Object> {
     @Override
     protected AbstractOrderedLayout createFieldInputsLayout() {
         HorizontalLayout fieldsHL = new HorizontalLayout();
@@ -33,13 +32,7 @@ public class MyBatisGeneratorForm extends QueryForm<Object> {
         return fieldsHL;
     }
 
-    @Override
     protected String createFieldInputsTitle() {
-        return null;
-    }
-
-    @Override
-    protected Grid<Object> createResultGrid() {
-        return null;
+        return "Generate MyBatis Mappers";
     }
 }

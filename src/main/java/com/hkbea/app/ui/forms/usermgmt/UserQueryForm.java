@@ -19,13 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @SpringView(name="UserQueryForm")
-public class UserQueryForm extends QueryForm<UserDat> {
+public class UserQueryForm extends QueryForm<UserDat, UserDatExample> {
     @PropertyId("id")
     private TextField idTF = new TextField(i18n("text.id"));
     @PropertyId("name")
     private TextField nameTF = new TextField(i18n("text.name"));
 
     private Grid<UserDat> grid = new Grid<>();
+
+    private final UserDat user = new UserDat();
 
     @Autowired
     private UserDatMapper userDatMapper;
@@ -46,7 +48,6 @@ public class UserQueryForm extends QueryForm<UserDat> {
         Binder<UserDat> binder = new Binder<>(UserDat.class);
         binder.bindInstanceFields(this);
 
-        final UserDat user = new UserDat();
 //        user.id = "hello";
 //        user.name = "world";
 
@@ -59,15 +60,7 @@ public class UserQueryForm extends QueryForm<UserDat> {
 
         Button queryBtn = new Button(i18n("text.query"));
         queryBtn.addClickListener(event -> {
-            UserDatExample ude = new UserDatExample();
-            ude.createCriteria()
-                    .andIdLike(null == user.getId() ? "%" : user.getId())
-                    .andNameLike(null == user.getName() ? "%" : user.getName());
-
-            List<UserDat> userDatList = userDatMapper.selectByExample(ude);
-
-            grid.setItems(userDatList);
-            grid.setVisible(true);
+            showQueryResult();
         });
         fieldsHL.addComponent(queryBtn);
         fieldsHL.setComponentAlignment(queryBtn, Alignment.BOTTOM_RIGHT);
@@ -82,5 +75,25 @@ public class UserQueryForm extends QueryForm<UserDat> {
         grid.addColumn(UserDat::getPassword).setCaption(i18n("text.password"));
 
         return grid;
+    }
+
+    @Override
+    protected UserDatExample createFilterExample() {
+        final UserDatExample ude = new UserDatExample();
+        ude.createCriteria()
+                .andIdLike(null == user.getId() ? "%" : user.getId())
+                .andNameLike(null == user.getName() ? "%" : user.getName());
+
+        return ude;
+    }
+
+    @Override
+    protected long getTotalCount(UserDatExample ude) {
+        return userDatMapper.countByExample(ude);
+    }
+
+    @Override
+    protected List<UserDat> getResultList(UserDatExample ude) {
+        return userDatMapper.selectByExample(ude);
     }
 }
