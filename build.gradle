@@ -56,6 +56,11 @@ dependencyManagement {
     }
 }
 
+task genMyBatis(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.hkbea.odinfw.generators.MyBatisGenerator'
+}
+
 wrapper {
     gradleVersion = '4.8.1'
 }
