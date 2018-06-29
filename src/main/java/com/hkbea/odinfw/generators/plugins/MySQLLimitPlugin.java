@@ -1,4 +1,4 @@
-package com.hkbea.odinfw.generator.plugins;
+package com.hkbea.odinfw.generators.plugins;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;

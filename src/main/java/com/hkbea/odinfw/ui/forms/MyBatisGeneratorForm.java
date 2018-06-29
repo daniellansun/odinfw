@@ -1,22 +1,17 @@
 package com.hkbea.odinfw.ui.forms;
 
+import com.hkbea.odinfw.generators.MyBatisGenerator;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import org.mybatis.generator.api.MyBatisGenerator;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.xml.ConfigurationParser;
+import com.vaadin.ui.Notification;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
-import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringView(name="MyBatisGeneratorForm")
 public class MyBatisGeneratorForm extends QueryForm<Object> {
@@ -26,15 +21,10 @@ public class MyBatisGeneratorForm extends QueryForm<Object> {
 
         Button genBtn = new Button("Generate");
         genBtn.addClickListener(event -> {
-            try (InputStream is = MyBatisGeneratorForm.class.getResourceAsStream("/generatorConfig.xml")) {
-                List<String> warnings = new ArrayList<>();
-                ConfigurationParser cp = new ConfigurationParser(warnings);
-                Configuration config = cp.parseConfiguration(is);
-                boolean overwrite = true;
-                DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-                MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
-                myBatisGenerator.generate(null);
+            try {
+                MyBatisGenerator.INSTANCE.generate();
             } catch (SQLException | IOException | InterruptedException | InvalidConfigurationException | XMLParserException e) {
+                Notification.show("Failed to generate MyBatis mappers: " + e.getMessage(), Notification.Type.TRAY_NOTIFICATION);
                 e.printStackTrace();
             }
         });
